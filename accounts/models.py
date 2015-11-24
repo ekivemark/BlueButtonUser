@@ -1,5 +1,5 @@
 """
-Models for bbonfhir Users
+Models for bluebuttonuser
 
 # Terms = Agreement
 # Developer = Account
@@ -83,6 +83,7 @@ class Application(AbstractApplication):
 
 class UserManager(BaseUserManager):
     def create_user(self,
+                    username,
                     email,
                     first_name,
                     last_name,
@@ -95,7 +96,8 @@ class UserManager(BaseUserManager):
 
         email = self.normalize_email(email)
 
-        user = self.model(email=email,
+        user = self.model(username=username,
+                          email=email,
                           first_name=first_name,
                           last_name=last_name,
                           )
@@ -103,12 +105,13 @@ class UserManager(BaseUserManager):
         user.save(using=self._db)
         return user
 
-    def create_superuser(self, email, first_name, last_name,
+    def create_superuser(self, username, email, first_name, last_name,
                          password, **extra_fields):
         """
         Creates and saves a superuser with the given email and password.
         """
-        user = self.create_user(email,
+        user = self.create_user(username,
+                                email,
                                 password=password,
                                 first_name=first_name,
                                 last_name=last_name,
@@ -130,6 +133,10 @@ class User(AbstractBaseUser):
     """
     Replacing the base user model - switch to using email as username
     """
+    username = models.CharField(verbose_name='user name',
+                                max_length=80,
+                                unique=True,
+                                db_index=True)
     email = models.EmailField(verbose_name='email address',
                               max_length=255,
                               unique=True,
@@ -167,16 +174,26 @@ class User(AbstractBaseUser):
 
     objects = UserManager()
 
-    USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['first_name', 'last_name', ]
+    #USERNAME_FIELD = 'email'
+    USERNAME_FIELD = 'username'
+
+    REQUIRED_FIELDS = ['email', 'first_name', 'last_name', ]
 
     def get_full_name(self):
-        # The user is identified by their email address
+        # The user is identified by their username
+        return self.username
+
+    def get_email(self):
+        # return the email address
         return self.email
 
+    def get_real_name(self):
+        # Get first and last name
+        return "%s %s" % (self.first_name, self.last_name)
+
     def get_short_name(self):
-        # The user is identified by their email address
-        return self.email
+        # The user is identified by their username
+        return self.username
 
     # def __str__(self):              # __unicode__ on Python 2
     #    return self.email
@@ -201,7 +218,7 @@ class User(AbstractBaseUser):
         # return "%s %s (%s)" % (self.first_name,
         #                       self.last_name,
         #                       self.email)
-        return str(self.email)
+        return str(self.username)
 
     def Meta(self):
         verbose_name = _('User')

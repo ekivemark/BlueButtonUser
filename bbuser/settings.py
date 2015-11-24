@@ -68,7 +68,8 @@ SECRET_KEY = PARSE_INI.get('global', 'secret_key')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = str2bool(PARSE_INI.get('global', 'debug'))
 
-TEMPLATE_DEBUG = str2bool(PARSE_INI.get('global', 'template_debug'))
+# TEMPLATE_DEBUG = str2bool(PARSE_INI.get('global', 'template_debug'))
+# deprecated in Django 1.8 - Moves to 'DEBUG': in template DICT below
 
 DEBUG_SETTINGS = str2bool(PARSE_INI.get('global', 'debug_settings'))
 
@@ -121,6 +122,7 @@ TEMPLATES = [
                 'django.template.loaders.app_directories.Loader',
             ],
         },
+        'DEBUG': str2bool(PARSE_INI.get('global', 'template_debug')),
     },
 ]
 
@@ -188,7 +190,7 @@ LOCAL_APPS = (
 INSTALLED_APPS = DEFAULT_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 
 AUTH_USER_MODEL = "accounts.User"
-USERNAME_FIELD = "email"
+USERNAME_FIELD = "username"
 # AUTHENTICATION_BACKENDS = ['accounts.backends.EmailAuthBackend',]
 AUTHENTICATION_BACKENDS = (
     #'django_python3_ldap.auth.LDAPBackend',
