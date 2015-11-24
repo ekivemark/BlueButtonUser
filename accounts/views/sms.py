@@ -102,13 +102,13 @@ def make_local_user(request, email):
     return result
 
 
-def validate_sms(username, smscode):
+def validate_sms(access_key, smscode):
     if settings.DEBUG:
-        print("%s, %s" % (username, smscode))
+        print("%s, %s" % (access_key, smscode))
 
     mfa_on = False
     try:
-        u = User.objects.get(username=username)
+        u = User.objects.get(username=access_key)
         mfa_on = u.mfa
         vc = ValidSMSCode.objects.get(user=u, sms_code=smscode)
         if settings.DEBUG:
@@ -164,7 +164,7 @@ def sms_login(request, *args, **kwargs):
             username = form.cleaned_data['username'].lower()
             password = form.cleaned_data['password'].lower()
             sms_code = form.cleaned_data['sms_code']
-            if not validate_sms(username=username, smscode=sms_code):
+            if not validate_sms(access_key=username, smscode=sms_code):
                 messages.error(request, "Invalid Access Code.")
                 return render_to_response('accounts/login.html',
                                           {'form': AuthenticationForm()},
