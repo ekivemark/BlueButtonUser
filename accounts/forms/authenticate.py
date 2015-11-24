@@ -18,7 +18,8 @@ class AuthenticationForm(forms.Form):
     """
     Login form
     """
-    email = forms.EmailField(widget=forms.widgets.TextInput)
+    username = forms.CharField(widget=forms.widgets.TextInput)
+    # email = forms.EmailField(widget=forms.widgets.TextInput)
     password = forms.CharField(widget=forms.widgets.PasswordInput)
     sms_code = forms.CharField(widget=forms.PasswordInput,
                                max_length=5,
@@ -26,14 +27,13 @@ class AuthenticationForm(forms.Form):
                                required=False)
 
     class Meta:
-        fields = ['email', 'password', 'sms_code']
+        fields = ['username', 'password', 'sms_code']
 
 
 class SMSCodeForm(forms.Form):
-    email = forms.EmailField(widget=forms.widgets.TextInput,
-                             label="Enter your email address:",
-                             help_text="Your email address is used as the username for your account. "
-                                       "We will ask for your password in the next step.")
+    username = forms.CharField(widget=forms.widgets.TextInput,
+                             label="Enter your username:",
+                             help_text="We will ask for your password in the next step.")
 
 
 class AuthenticationSMSForm(forms.Form):

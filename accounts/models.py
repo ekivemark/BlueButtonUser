@@ -96,7 +96,7 @@ class UserManager(BaseUserManager):
 
         email = self.normalize_email(email)
 
-        user = self.model(username=username,
+        user = self.model(username=username.lower(),
                           email=email,
                           first_name=first_name,
                           last_name=last_name,
@@ -110,8 +110,10 @@ class UserManager(BaseUserManager):
         """
         Creates and saves a superuser with the given email and password.
         """
-        user = self.create_user(username,
-                                email,
+        username = username.lower()
+        email = email
+        user = self.create_user(username=username,
+                                email=email,
                                 password=password,
                                 first_name=first_name,
                                 last_name=last_name,

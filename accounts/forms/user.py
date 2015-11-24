@@ -15,7 +15,8 @@ from accounts.models import User, ACTIVITY_NOTIFY_CHOICES
 class User_EditForm(forms.ModelForm):
     class Meta:
         model = User
-        fields = ['first_name',
+        fields = ['email',
+                  'first_name',
                   'last_name',
                   'mobile',
                   'carrier',

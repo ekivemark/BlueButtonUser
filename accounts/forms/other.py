@@ -32,7 +32,7 @@ class UserRegistrationForm(forms.ModelForm):
     A form for creating new users. Includes all the required
     fields, plus a repeated password.
     """
-    # email will be become username
+    # email will be no longer become username
     email = Email()
 
     password1 = forms.CharField(widget=forms.PasswordInput(),
@@ -40,7 +40,7 @@ class UserRegistrationForm(forms.ModelForm):
     password2 = forms.CharField(widget=forms.PasswordInput(),
                                 label="Repeat your password")
 
-    fields = ['email', 'password1', 'password2' ]
+    fields = ['username', 'email', 'password1', 'password2' ]
 
     def clean_password(self):
         if self.data['password1'] != self.data['password2']:
