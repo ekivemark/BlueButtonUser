@@ -10,3 +10,5 @@ This is one part of a three part application suite:
 0. BlueButtonFHIR_API - Public API providing authenticated pass-through to back-end FHIR Services. 
    ( https://github.com/ekivemark/BlueButtonFHIR_API ) 
  
+November 24, 2015: 
+Baseline update with Account, sub-account and secret QA sections implemented. Based on BBofUser repository.
