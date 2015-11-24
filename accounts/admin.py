@@ -59,7 +59,7 @@ class UserChangeForm(forms.ModelForm):
 
     class Meta:
         model = User
-        fields = ('email', 'password', 'first_name', 'last_name',
+        fields = ('username', 'email', 'password', 'first_name', 'last_name',
                   'is_active', 'is_admin', 'is_staff', 'notify_activity')
 
     def clean_password(self):
@@ -77,10 +77,10 @@ class UserAdmin(UserAdmin):
     # The fields to be used in displaying the User model.
     # These override the definitions on the base UserAdmin
     # that reference specific fields on auth.User.
-    list_display = ('email', 'first_name', 'last_name', 'is_admin')
+    list_display = ('username', 'email', 'first_name', 'last_name', 'is_admin')
     list_filter = ('is_admin',)
     fieldsets = (
-        (None, {'fields': ('email', 'password')}),
+        (None, {'fields': ('username', 'email', 'password')}),
         ('Personal info', {'fields': ('first_name',
                                       'last_name',
                                       'mobile',
@@ -91,7 +91,7 @@ class UserAdmin(UserAdmin):
         'Permissions', {'fields': ('is_admin', 'is_active', 'is_staff',)}),
     )
 
-    # TODO: Need to make phone number formatting more user friendly
+    # Done: Need to make phone number formatting more user friendly
     # Currently requires +Country code
 
 
@@ -100,11 +100,11 @@ class UserAdmin(UserAdmin):
     add_fieldsets = (
         (None, {
             'classes': ('wide',),
-            'fields': ('email', 'password1', 'password2')}
+            'fields': ('username', 'email', 'password1', 'password2')}
          ),
     )
-    search_fields = ('email',)
-    ordering = ('email',)
+    search_fields = ('email', 'username')
+    ordering = ('username',)
     filter_horizontal = ()
 
 

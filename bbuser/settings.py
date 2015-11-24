@@ -121,8 +121,8 @@ TEMPLATES = [
                 'django.template.loaders.filesystem.Loader',
                 'django.template.loaders.app_directories.Loader',
             ],
+            'debug': str2bool(PARSE_INI.get('global', 'template_debug')),
         },
-        'DEBUG': str2bool(PARSE_INI.get('global', 'template_debug')),
     },
 ]
 
