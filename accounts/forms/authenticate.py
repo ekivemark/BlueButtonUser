@@ -18,8 +18,11 @@ class AuthenticationForm(forms.Form):
     """
     Login form
     """
-    username = forms.CharField(widget=forms.widgets.TextInput)
-    # email = forms.EmailField(widget=forms.widgets.TextInput)
+    if settings.USERNAME_FIELD == "email":
+        email = forms.EmailField(widget=forms.widgets.TextInput)
+    else:
+        username = forms.CharField(widget=forms.widgets.TextInput)
+
     password = forms.CharField(widget=forms.widgets.PasswordInput)
     sms_code = forms.CharField(widget=forms.PasswordInput,
                                max_length=5,
@@ -27,12 +30,17 @@ class AuthenticationForm(forms.Form):
                                required=False)
 
     class Meta:
-        fields = ['username', 'password', 'sms_code']
+        fields = [settings.USERNAME_FIELD, 'password', 'sms_code']
 
 
 class SMSCodeForm(forms.Form):
-    username = forms.CharField(widget=forms.widgets.TextInput,
-                             label="Enter your username:",
+    if settings.USERNAME_FIELD == "email":
+        email = forms.EmailField(widget=forms.widgets.TextInput,
+                                 label="Enter your email address",
+                                 help_text="We will ask for your password in the next step.")
+    else:
+        username = forms.CharField(widget=forms.widgets.TextInput,
+                             label="Please enter your username:",
                              help_text="We will ask for your password in the next step.")
 
 
@@ -40,7 +48,10 @@ class AuthenticationSMSForm(forms.Form):
     """
     Login form
     """
-    email = forms.EmailField(widget=forms.widgets.TextInput)
+    if settings.USERNAME_FIELD == "email":
+        email = forms.EmailField(widget=forms.widgets.TextInput)
+    else:
+        username = forms.CharField(widget=forms.widgets.TextInput)
     password = forms.CharField(widget=forms.widgets.PasswordInput)
     sms_code = forms.CharField(widget=forms.PasswordInput,
                                max_length=5,
@@ -54,7 +65,10 @@ class AuthenticationSMSForm(forms.Form):
 
     def clean(self):
         cleaned_data = super(AuthenticationSMSForm, self).clean()
-        u = User.objects.get(email=self.cleaned_data['email'])
+        if settings.USERNAME_FIELD == "email":
+            u = User.objects.get(email=self.cleaned_data['email'])
+        else:
+            u = User.objects.get(username=self.cleaned_data['username'])
         mfa = u.mfa
         if settings.DEBUG:
             print(self.cleaned_data)

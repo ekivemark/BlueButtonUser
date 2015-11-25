@@ -80,9 +80,11 @@ def verify_phone(request):
 def user_edit(request):
     if settings.DEBUG:
         print(request.user)
-        print("Entering User Edit with:%s" % request.user.email)
+        print("Entering User Edit with:%s" % request.user)
 
-    u = User.objects.get(email=request.user.email)
+    access_field = settings.USERNAME_FIELD
+
+    u = User.objects.get(**{access_field: request.user})
     if settings.DEBUG:
         print("User returned:", u, "[", u.first_name, " ", u.last_name,
               "]")
@@ -96,6 +98,7 @@ def user_edit(request):
             if settings.DEBUG:
                 print("Form is valid - current record:", u)
 
+            u.email = form.cleaned_data['email']
             u.first_name = form.cleaned_data['first_name']
             u.last_name = form.cleaned_data['last_name']
             u.mobile = form.cleaned_data['mobile']
@@ -125,12 +128,13 @@ def user_edit(request):
                           {'form': form})
 
     else:
-        u = User.objects.get(email=request.user.email)
+        u = User.objects.get(**{access_field:request.user})
         if settings.DEBUG:
             print("in the get with User:", u.first_name, " ", u.last_name,
                   " ", u.mobile)
         form = User_EditForm(
-            initial={'first_name': u.first_name,
+            initial={'email': u.email,
+                     'first_name': u.first_name,
                      'last_name': u.last_name,
                      'mobile': u.mobile,
                      'carrier': u.carrier,
