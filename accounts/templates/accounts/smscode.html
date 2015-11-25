@@ -40,8 +40,10 @@
             <p>{{ form.username.help_text }}</p>
 
             <p>&nbsp;</p>
+            <p>
             <input type="submit" class="active btn btn-lg btn-success"
-                   value="{% trans 'Login' %}"/>
+                   name="login" value="{% trans 'Login' %}"/>
+            </p>
             <input type="hidden" name="next" value="{{ next|escape }}"/>
             {% csrf_token %}
 

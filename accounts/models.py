@@ -58,27 +58,6 @@ ACTIVITY_NOTIFY_CHOICES = (('N', "No Notifications"),
 
 # class Application(models.Model):
 # @login_required()
-class Application(AbstractApplication):
-    # Application keys
-    # owner = models.ForeignKey(settings.AUTH_USER_MODEL,
-    #                           related_name='+',
-    #                           blank=True,
-    #                           null=True,
-    #                           )
-
-    valid_until = models.DateTimeField(editable=False)
-    # editable=False to hide in admin
-
-    def save(self):
-        d = timedelta(days=365)
-
-        # only add 365 days if it's the first time the model is saved
-        if not self.id:
-            self.mydate = datetime.now() + d
-            super(MyModel, self).save()
-
-    def get_absolute_url(self):
-        return reverse('accounts:application_detail', args=[str(self.pk)])
 
 
 class UserManager(BaseUserManager):

@@ -55,10 +55,6 @@ urlpatterns = patterns('',
                            'accounts.views.other.manage_account',
                            name='manage_account'),
                        # DONE: apply session_master
-                       url(r'^connect_application$',
-                           'accounts.views.connect_application',
-                           name='connect_application'),
-                       # DONE: apply session_master
                        url(r'^user/edit$',
                            'accounts.views.user.user_edit',
                            name='user_edit'),
@@ -67,9 +63,6 @@ urlpatterns = patterns('',
                            'accounts.views.user.account_access',
                            name='account_access'),
                        # DONE: apply session_master
-                       url(r'^application/edit/(?P<pk>[-\w]+)/$',
-                           'accounts.views.organization.application_edit',
-                           name='application_edit'),
 
                        url(r'^admin/', include(admin.site.urls)),
 

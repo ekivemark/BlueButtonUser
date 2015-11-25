@@ -7,7 +7,6 @@ from django.contrib.auth.forms import ReadOnlyPasswordHashField
 # Register your models here.
 from accounts.models import (User,
                              ValidSMSCode,
-                             Application,
                              Crosswalk)
 
 
@@ -108,18 +107,9 @@ class UserAdmin(UserAdmin):
     filter_horizontal = ()
 
 
-class ApplicationAdmin(admin.ModelAdmin):
-    """
-    Tailor the Application page in the main Admin module
-    """
-    # DONE: Add Admin view for applications
-    list_display = ('name', 'user')
-
-
 # admin.site.register(Account)
 admin.site.register(User, UserAdmin)
-admin.site.register(Application, ApplicationAdmin)
-# admin.site.register(ApplicationKey)
+
 admin.site.register(ValidSMSCode)
 admin.site.register(Crosswalk)
 

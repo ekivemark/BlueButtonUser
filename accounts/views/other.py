@@ -24,11 +24,9 @@ from django.views.generic.detail import DetailView
 from accounts.admin import UserCreationForm
 from accounts.decorators import (session_master,
                                  session_master_required)
-from accounts.forms.application import (ApplicationCheckForm)
 from accounts.forms.authenticate import AuthenticationForm
 from accounts.forms.register import RegistrationForm
-from accounts.models import (Application,
-                             Crosswalk)
+from accounts.models import (Crosswalk)
 from accounts.utils import (cell_email,
                             send_activity_message)
 
@@ -96,23 +94,6 @@ def logout(request):
     if mode == "subacc":
         return redirect(reverse_lazy('api:home'))
     return redirect(reverse_lazy('home'))
-
-
-# class AccountDetailView(DetailView):
-#     model = Account
-#     slug_field = "id"
-#
-#     def get_context_data(self, **kwargs):
-#         fields = [(f.verbose_name, f.name, f.value) for f in
-#                   Account._meta.get_fields()]
-#
-#         context = super(AccountDetailView,
-#                         self).get_context_data(**kwargs)
-#
-#         context['now'] = timezone.now()
-#         context['fields'] = fields
-#
-#         return context
 
 
 def home_index(request):
@@ -230,77 +211,5 @@ def manage_account(request):
                               RequestContext(request, context, ))
 
 
-# DONE: Add Connect_Organization View
-# DONE: prompt for Organization top level url
 # DONE: Convert url to lowercase
-# DONE: Check if top level url exists in organization.site_url
-# DONE: If Organization is not found open form for data input
-# DONE: Update User.affiliated_to and User.organization_role
-# DONE: Save Organization with link to User
-# DONE: Create developer/connect_organization.html
 # DONE: Add view to accounts/urls.py.py
-
-
-@session_master
-@login_required
-def connect_application(request):
-    """
-    Connect application to Organization and User
-    :param request:
-    :return:
-    """
-
-    user = request.user
-    application_title = settings.APPLICATION_TITLE
-
-    context = {"user": user}
-
-    if settings.DEBUG:
-        print(application_title, "in accounts.views.connect_application")
-        print("request.method:")
-        print(request.method)
-        print(request.POST)
-
-    if request.method == 'POST':
-        form = ApplicationCheckForm(data=request.POST)
-
-        if form.is_valid():
-            if settings.DEBUG:
-                print("form is valid")
-                print("form", form.cleaned_data)
-
-            app = Application()
-            app.name = form.cleaned_data['name']
-            app.callback = form.cleaned_data['callback'].lower()
-            app.owner = request.user
-            app.user_id = request.user.id
-
-            if settings.DEBUG:
-                print("OrgApp:", app, app.owner, user)
-
-            app.save()
-
-            if settings.DEBUG:
-                print("user", user)
-
-            return redirect(reverse_lazy('accounts:manage_account'))
-        else:
-            print("ApplicationCheckForm", request.POST, " NOT Valid")
-    else:
-        form = ApplicationCheckForm()
-
-    context['form'] = form
-
-    if settings.DEBUG:
-        print("Loading Render toResponse in accounts.views.other.connect_application")
-
-    return render_to_response('accounts/connect_application.html',
-                              context,
-                              context_instance=RequestContext(request))
-
-@session_master
-@login_required
-class Application_Detail(DetailView):
-    model = Application
-
-
