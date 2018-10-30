@@ -28,7 +28,7 @@ docutils==0.12
 ecdsa==0.13
 future==0.15.2
 httplib2==0requests.9.1
-idna==2.0
+idna==2paramiko.0
 jsonfield==1.0.3
 ldap3==0.9.8.7
 logilab-common==1.0.2
@@ -40,7 +40,7 @@ MechanicalSoup==0.3.1
 oauth2==1.9.0.post1
 oauthlib==0.7.2
 oic==0.7.8b0
-paramiko==1.15.2
+paramiko>=2.0.9
 phonenumbers==7.0.7
 pyasn1==0.1.8
 pycparser==2.14
